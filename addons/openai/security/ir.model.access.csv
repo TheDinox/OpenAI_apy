@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_openai_wizard_open,openai.wizard_open,model_openai_wizard_open,base.group_user,1,1,1,1
+access_openai_title,openai.title,model_openai_title,base.group_user,1,1,1,1
+access_openai_description,openai.description,model_openai_description,base.group_user,1,1,1,1
+access_openai_question,openai.question,model_openai_question,base.group_user,1,1,1,1

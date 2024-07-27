@@ -1,0 +1,88 @@
+<odoo>
+  <data>
+    <record model="ir.ui.view" id="openai_form">
+      <field name="name">openai list</field>
+      <field name="model">openai.wizard_open</field>
+      <field name="arch" type="xml">
+        <form>
+            <div class="modal-content" style="padding: 20px">
+            <group>
+              <field name="name"/>
+              <field name="id_product" invisible="1"/>
+              <field name="attributes" invisible="1"/>
+              <field name="generation"/>
+              <field name="attributes_values" widget="one2many" invisible="generation == 'preguntas'">
+                <tree string="Variantes" editable="bottom" decoration-info="value_count &lt;= 1">
+                    <field name="value_count" column_invisible="True"/>
+                    <field name="sequence" widget="handle"/>
+                    <field name="attribute_id" readonly="id" on_change="1" can_create="True" can_write="True"/>
+                    <field name="value_ids" widget="many2many_tags" options="{'no_create_edit': True, 'color_field': 'color'}" context="{'default_attribute_id': attribute_id, 'show_attribute': False}" on_change="1" can_create="True" can_write="True"/>
+                    <button string="Configurar" class="float-end btn-secondary" type="object" name="action_open_attribute_values"/>
+                </tree>
+              </field>
+              <field name="description" invisible="generation != 'descripcion'"/>
+              <field name="question" invisible="generation != 'preguntas'"/>
+            </group>
+            <group>
+              <button name="generate_titles" string="Generar titulos" type="object" class="oe_highlight" invisible="generation != 'titulo'"/>
+              <button name="generate_description" string="Generar descripcion" type="object" class="oe_highlight" invisible="generation != 'descripcion'"/>
+              <button name="generate_question" string="Enviar" type="object" class="oe_highlight" invisible="generation != 'preguntas'"/>
+            </group>
+            <group>
+              <field name="answer_title" invisible="generation != 'titulo'"/>
+              <field name="answer_description" invisible="generation != 'descripcion'"/>
+              <field name="answer_chat" invisible="generation != 'preguntas'"/>
+            </group>
+            <div>
+            <group>
+              <button name="save_name" string="Guardar" type="object" class="oe_highlight" invisible="generation != 'titulo'"/>
+              <button name="save_description" string="Guardar" type="object" class="oe_highlight" invisible="generation != 'descripcion'"/>
+              <button name="delete_generated_titles" string="Eliminar" type="object" class="btn-secondary" invisible="generation != 'titulo'"/>
+              <button name="delete_generated_description" string="Eliminar" type="object" class="btn-secondary" invisible="generation != 'descripcion'"/>
+              <button name="delete_generated_question" string="Eliminar" type="object" class="btn-secondary" invisible="generation != 'preguntas'"/>
+              </group>
+            </div>
+            </div>
+          <footer>
+            <button string="Cancel" class="btn-secondary" special="cancel"/>
+          </footer>
+        </form>
+      </field>
+    </record>
+
+  <record id="view_product_template_kanban_inherit" model="ir.ui.view">
+    <field name="name">product.template.kanban.inherit</field>
+    <field name="model">product.template</field>
+    <field name="inherit_id" ref="product.product_template_kanban_view"/>
+    <field name="arch" type="xml">
+      <xpath expr="//field[@name='name']" position="after">
+        <div>
+          <!-- Agregar el botón dentro de la vista kanban -->
+          <button name="open_wizard" string="IA" type="object" class="oe_highlight"/>
+        </div>
+      </xpath>
+    </field>
+  </record>
+
+  <record id="view_product_template_form_inherit" model="ir.ui.view">
+    <field name="name">product.template.product.form.inherit</field>
+    <field name="model">product.template</field>
+    <field name="inherit_id" ref="product.product_template_only_form_view"/>
+    <field name="arch" type="xml">
+      <xpath expr="//div[@name='button_box']" position="inside">
+          <!-- Agregar el botón dentro de la vista form -->
+          <button name="open_wizard" string="Generar Datos con IA" type="object"/>
+      </xpath>
+    </field>
+  </record>
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="openai.action_window">
+      <field name="name">openai window</field>
+      <field name="res_model">openai.wizard_open</field>
+      <field name="view_mode">form</field>
+      <field name="target">new</field>
+    </record>
+  </data>
+</odoo>
